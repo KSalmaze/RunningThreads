@@ -3,12 +3,20 @@ namespace RunningThreads;
 public class InterfaceManager
 {
     public int FrameRate; // Apenas uma atualização por frame
-    public readonly string BaseInterface = 
-        "__ \n" +
+
+    public readonly string[] BaseInterface = new string[]
+    {
+        "__",
+        "  | - - - - - - - - - - - -",
+        "  | - - - - - - - - - - - -",
+        "  | - - - - - - - - - - - -",
+        "--"
+    };
+        /*"__ \n" +
         " | - - - - - - - - - - - - \n" +
         " | - - - - - - - - - - - - \n" +
         " | - - - - - - - - - - - - \n" +
-        "-- \n";
+        "-- \n";*/
     
     public InterfaceManager()
     {
@@ -25,8 +33,16 @@ public class InterfaceManager
         while (true)
         {
             await Task.Delay(1000 / FrameRate);
-            
-            
+            Console.WriteLine("Atualizando a tela");
+            await UpdateInterface();
+        }
+    }
+
+    public async Task UpdateInterface()
+    {
+        foreach (var line in BaseInterface)
+        {
+            Console.WriteLine(line);
         }
     }
 }

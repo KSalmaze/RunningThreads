@@ -7,8 +7,8 @@ public class Program
     {
         // Menu - 1 Jogar - 2 Jogar Modo debug - 3 Como Jogar - 4 Quit
         
-        InterfaceManager interfaeManager = new InterfaceManager();
+        InterfaceManager interfaceManager = new InterfaceManager();
 
-        Console.Write(interfaeManager.BaseInterface);
+        interfaceManager.UpdateInterface();
     }
 }
