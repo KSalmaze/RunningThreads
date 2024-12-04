@@ -14,6 +14,8 @@ public class Enemy
         Sprite = sprite;
         Lane = lane;
         _position = 12;
+        
+        // Iniciar a task de ia
     }
 
     private void UpdatePositionOnInterface()
@@ -22,7 +24,7 @@ public class Enemy
     }
     
     private async Task EnemyController()
-    {
+    { 
         while (_position < 0)
         {
             UpdatePositionOnInterface();

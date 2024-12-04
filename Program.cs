@@ -1,3 +1,14 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System;
+using RunningThreads;
 
-Console.WriteLine("Hello, World!");
+public class Program
+{
+    static void Main(string[] args)
+    {
+        // Menu - 1 Jogar - 2 Jogar Modo debug - 3 Como Jogar - 4 Quit
+        
+        InterfaceManager interfaeManager = new InterfaceManager();
+
+        Console.Write(interfaeManager.BaseInterface);
+    }
+}
