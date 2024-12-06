@@ -45,6 +45,10 @@ public class InterfaceManager
         try
         {
             AtualizarInterface(sprite, position, lane);
+            if (position < 26)
+            {
+                AtualizarInterface('-', position + 2, lane);
+            }
         }
         finally 
         {
@@ -59,16 +63,11 @@ public class InterfaceManager
 
         char[] temp = Interface[lane].ToCharArray();
         
-        Console.Write(position >= temp.Length);
+        //Console.Write(position >= temp.Length);
         if (position >= temp.Length)
             return;
 
         temp[position] = sprite;
-        
-        if (position < 26)
-        {
-            temp[position + 2] = '-'; //BaseInterface[lane][position + 2];
-        }
         
         Interface[lane] = new string(temp);
     }
