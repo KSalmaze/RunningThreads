@@ -5,14 +5,8 @@ public class InterfaceManager
     // Singleton
     private static readonly InterfaceManager instance = new InterfaceManager();
 
-    public static InterfaceManager Instance
-    {
-        get
-        {
-            return instance;
-        }
-    }
-    
+    public static InterfaceManager Instance => instance;
+
     // Construtor
     private InterfaceManager()
     {
@@ -24,6 +18,9 @@ public class InterfaceManager
 
     // Propriedades
     public int FrameRate; // Apenas uma atualização por frame
+    
+    private readonly SemaphoreSlim _interfaceSemaphore = new SemaphoreSlim(1, 1);
+    private readonly object _interfaceLock = new object();
 
     private string[] BaseInterface = new string[]
     {
@@ -39,20 +36,37 @@ public class InterfaceManager
     // Metodos
     
     // metodo a se proteger usando semaforos, se necessario criar uma outra funcao para efetivamente alterar a tela
-    public void AdicionarAtualizacao(char sprite, int position, int lane)
+    public async Task AdicionarAtualizacao(char sprite, int position, int lane)
     {
-        Console.WriteLine("Atualizacao chamada");
-        
+        await _interfaceSemaphore.WaitAsync();
+        try
+        {
+            AtualizarInterface(sprite, position, lane);
+        }
+        finally 
+        {
+            _interfaceSemaphore.Release();
+        }
+    }
+    
+    private void AtualizarInterface(char sprite, int position, int lane)
+    {
+        if (lane < 0 || lane >= Interface.Length || position < 0)
+            return;
+
         char[] temp = Interface[lane].ToCharArray();
+        
+        if (position >= temp.Length)
+            return;
+
         temp[position] = sprite;
         
-        if (position < 26)
+        if (position < 26 && lane + 1 < BaseInterface.Length)
         {
             temp[position + 2] = BaseInterface[lane + 1][position + 2];
         }
         
-        Console.WriteLine($"Nova linha: \n {temp}");
-        Interface[lane] = temp.ToString();
+        Interface[lane] = new string(temp);
     }
 
     public async Task AtualizarTela()
@@ -67,10 +81,18 @@ public class InterfaceManager
 
     public async Task UpdateInterface()
     {
-        //Console.Clear(); // Limpa a tela
-        foreach (var line in Interface)
+        await _interfaceSemaphore.WaitAsync();
+        try
         {
-            Console.WriteLine(line);
+            Console.Clear();
+            foreach (var line in Interface)
+            {
+                Console.WriteLine(line);
+            }
+        }
+        finally
+        {
+            _interfaceSemaphore.Release();
         }
     }
 }
