@@ -23,7 +23,7 @@ public class Enemy
     private async Task UpdatePositionOnInterface()
     {
         _position -= 2;
-        _interfaceManager.AdicionarAtualizacao(_sprite, _position, _delayMilliseconds);
+        await _interfaceManager.AdicionarAtualizacao(_sprite, _position, Lane);
     }
     
     private async Task EnemyController()
