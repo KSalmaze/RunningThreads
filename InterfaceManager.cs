@@ -11,6 +11,7 @@ public class InterfaceManager
     {
         FrameRate = 10;
         Interface = BaseInterface;
+        _gameManager = GameManager.Instance;
 
         _ = Task.Run(async () => await AtualizarTela());
     }
@@ -19,7 +20,6 @@ public class InterfaceManager
     public int FrameRate; // Apenas uma atualização por frame
     
     private readonly SemaphoreSlim _interfaceSemaphore = new SemaphoreSlim(1, 1);
-    private readonly object _interfaceLock = new object();
 
     private string[] BaseInterface = new string[]
     {
@@ -31,6 +31,8 @@ public class InterfaceManager
     };
 
     public string[] Interface;
+    
+    private GameManager _gameManager;
     
     // Metodos
     
@@ -91,6 +93,8 @@ public class InterfaceManager
             {
                 Console.WriteLine(line);
             }
+            // Print de infos
+            Console.WriteLine($"Vida: {_gameManager.CurrentHealth} Gold: {_gameManager.Gold}");
         }
         finally
         {
