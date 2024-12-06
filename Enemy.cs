@@ -37,6 +37,7 @@ public class Enemy
     { 
         while (Health > 0)
         {
+            // Se a vida for menor que 33% tirar do caps lock
             if (_position > 3) // Implementar um CanMove
             {
                 await UpdatePositionOnInterface();
@@ -48,7 +49,7 @@ public class Enemy
             await Task.Delay(_delayMilliseconds);
         }
         
-        // retirar ele da interface
+        // Retirar o inimigo da interface
         // Dar o gold ao jogador
         await _gameManager.ChangeGold(Gold);
     }

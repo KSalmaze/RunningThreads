@@ -12,6 +12,8 @@ public class GameManager
         MaxHealth = 10;
         _currentHealth = MaxHealth;
         _gold = 0;
+
+        _ = Task.Run(async () => await RegenHealth());
     }
     
     // Property s
@@ -59,6 +61,12 @@ public class GameManager
                 await Health(+1);
             }
         }
+        
+        EndGame();
     }
-
+    
+    private void EndGame()
+    {
+        throw new NotImplementedException();
+    }
 }
