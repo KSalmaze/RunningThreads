@@ -1,10 +1,8 @@
-using System.Runtime.Intrinsics.Arm;
-
 namespace RunningThreads;
 
 public class Enemy
 {
-    public char Sprite;
+    private char _sprite;
     public int Lane;
     private int _delayMilliseconds;
     private int _position;
@@ -13,27 +11,28 @@ public class Enemy
     
     public Enemy(char sprite, int lane, int delayMilliseconds = 500)
     {
-        Sprite = sprite;
+        _sprite = sprite;
         Lane = lane;
         _position = 27; // Vai para a ultima posicao da lane
         _delayMilliseconds = delayMilliseconds;
+        _interfaceManager = InterfaceManager.Instance;
 
         _ = Task.Run(async () => await EnemyController());
     }
 
-    private void UpdatePositionOnInterface()
+    private async Task UpdatePositionOnInterface()
     {
         _position -= 2;
-        _interfaceManager.AdicionarAtualizacao(Sprite, _position, _delayMilliseconds);
+        _interfaceManager.AdicionarAtualizacao(_sprite, _position, _delayMilliseconds);
     }
     
     private async Task EnemyController()
     { 
-        while (_position < 3)// (health > 0)
+        while (_position > 3)// (health > 0)
         {
-            if (_position < 3)
+            if (_position > 3)
             {
-                UpdatePositionOnInterface();
+                _ = Task.Run(async () => await UpdatePositionOnInterface());
             }
             else
             {

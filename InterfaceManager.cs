@@ -2,15 +2,9 @@ namespace RunningThreads;
 
 public class InterfaceManager
 {
+    // Singleton
     private static readonly InterfaceManager instance = new InterfaceManager();
 
-    private InterfaceManager()
-    {
-        FrameRate = 10;
-
-        _ = Task.Run(async () => await AtualizarTela());
-    }
-    
     public static InterfaceManager Instance
     {
         get
@@ -19,9 +13,19 @@ public class InterfaceManager
         }
     }
     
+    // Construtor
+    private InterfaceManager()
+    {
+        FrameRate = 10;
+        Interface = BaseInterface;
+
+        _ = Task.Run(async () => await AtualizarTela());
+    }
+
+    // Propriedades
     public int FrameRate; // Apenas uma atualização por frame
 
-    public string[] BaseInterface = new string[]
+    private string[] BaseInterface = new string[]
     {
         "__",
         "  |- - - - - - - - - - - - -  ",
@@ -30,9 +34,25 @@ public class InterfaceManager
         "--                    "
     };
 
+    public string[] Interface;
+    
+    // Metodos
+    
+    // metodo a se proteger usando semaforos, se necessario criar uma outra funcao para efetivamente alterar a tela
     public void AdicionarAtualizacao(char sprite, int position, int lane)
     {
-        // Coloca na fila de processos, uma chamada dessa lista por frame
+        Console.WriteLine("Atualizacao chamada");
+        
+        char[] temp = Interface[lane].ToCharArray();
+        temp[position] = sprite;
+        
+        if (position < 26)
+        {
+            temp[position + 2] = BaseInterface[lane + 1][position + 2];
+        }
+        
+        Console.WriteLine($"Nova linha: \n {temp}");
+        Interface[lane] = temp.ToString();
     }
 
     public async Task AtualizarTela()
@@ -47,8 +67,8 @@ public class InterfaceManager
 
     public async Task UpdateInterface()
     {
-        Console.Clear(); // Limpa a tela
-        foreach (var line in BaseInterface)
+        //Console.Clear(); // Limpa a tela
+        foreach (var line in Interface)
         {
             Console.WriteLine(line);
         }
