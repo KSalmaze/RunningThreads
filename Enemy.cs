@@ -9,25 +9,36 @@ public class Enemy
     private int _delayMilliseconds;
     private int _position;
     
-    public Enemy(char sprite, int lane, int delayMilliseconds = 1000)
+    private InterfaceManager _interfaceManager;
+    
+    public Enemy(char sprite, int lane, int delayMilliseconds = 500)
     {
         Sprite = sprite;
         Lane = lane;
-        _position = 12;
-        
-        // Iniciar a task de ia
+        _position = 27; // Vai para a ultima posicao da lane
+        _delayMilliseconds = delayMilliseconds;
+
+        _ = Task.Run(async () => await EnemyController());
     }
 
     private void UpdatePositionOnInterface()
     {
-        // Acessar a interface e atualizar a tela
+        _position -= 2;
+        _interfaceManager.AdicionarAtualizacao(Sprite, _position, _delayMilliseconds);
     }
     
     private async Task EnemyController()
     { 
-        while (_position < 0)
+        while (_position < 3)// (health > 0)
         {
-            UpdatePositionOnInterface();
+            if (_position < 3)
+            {
+                UpdatePositionOnInterface();
+            }
+            else
+            {
+                // Ataque
+            }
             await Task.Delay(_delayMilliseconds);
         }
     }

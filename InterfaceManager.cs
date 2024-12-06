@@ -2,28 +2,35 @@ namespace RunningThreads;
 
 public class InterfaceManager
 {
-    public int FrameRate; // Apenas uma atualização por frame
+    private static readonly InterfaceManager instance = new InterfaceManager();
 
-    public readonly string[] BaseInterface = new string[]
-    {
-        "__",
-        "  | - - - - - - - - - - - -",
-        "  | - - - - - - - - - - - -",
-        "  | - - - - - - - - - - - -",
-        "--"
-    };
-        /*"__ \n" +
-        " | - - - - - - - - - - - - \n" +
-        " | - - - - - - - - - - - - \n" +
-        " | - - - - - - - - - - - - \n" +
-        "-- \n";*/
-    
-    public InterfaceManager()
+    private InterfaceManager()
     {
         FrameRate = 10;
-    }
 
-    public void AdicionarAtualizacao(string sprite, int position, int lane)
+        _ = Task.Run(async () => await AtualizarTela());
+    }
+    
+    public static InterfaceManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+    
+    public int FrameRate; // Apenas uma atualização por frame
+
+    public string[] BaseInterface = new string[]
+    {
+        "__",
+        "  |- - - - - - - - - - - - -  ",
+        "  |- - - - - - - - - - - - -  ",
+        "  |- - - - - - - - - - - - -  ",
+        "--                    "
+    };
+
+    public void AdicionarAtualizacao(char sprite, int position, int lane)
     {
         // Coloca na fila de processos, uma chamada dessa lista por frame
     }
@@ -40,6 +47,7 @@ public class InterfaceManager
 
     public async Task UpdateInterface()
     {
+        Console.Clear(); // Limpa a tela
         foreach (var line in BaseInterface)
         {
             Console.WriteLine(line);
