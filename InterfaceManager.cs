@@ -4,7 +4,6 @@ public class InterfaceManager
 {
     // Singleton
     private static readonly InterfaceManager instance = new InterfaceManager();
-
     public static InterfaceManager Instance => instance;
 
     // Construtor
@@ -64,9 +63,9 @@ public class InterfaceManager
 
         temp[position] = sprite;
         
-        if (position < 26 && lane + 1 < BaseInterface.Length)
+        if (position < 26)
         {
-            temp[position + 2] = BaseInterface[lane + 1][position + 2];
+            temp[position + 2] = '-'; //BaseInterface[lane][position + 2];
         }
         
         Interface[lane] = new string(temp);

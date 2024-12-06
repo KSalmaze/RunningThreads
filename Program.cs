@@ -18,6 +18,8 @@ public class Program
         //interfaceManager.Interface[2] = new string (a);
 
         Enemy inimigoTeste = new Enemy('A',1, 1000);
+        Enemy inimigoTeste1 = new Enemy('V',2, 2000);
+        Enemy inimigoTeste2 = new Enemy('T',3, 1500);
         
         interfaceManager.UpdateInterface();
         
