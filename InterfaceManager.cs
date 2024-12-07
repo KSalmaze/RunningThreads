@@ -39,7 +39,7 @@ public class InterfaceManager
     // metodo a se proteger usando semaforos, se necessario criar uma outra funcao para efetivamente alterar a tela
     public async Task AdicionarAtualizacao(char sprite, int position, int lane)
     {
-        Console.WriteLine(" New request");
+        //Console.WriteLine(" New request");
         
         await _interfaceSemaphore.WaitAsync();
         try
@@ -87,7 +87,7 @@ public class InterfaceManager
         await _interfaceSemaphore.WaitAsync();
         try
         {
-            Console.Clear();
+            //Console.Clear();
             foreach (var line in Interface)
             {
                 Console.WriteLine(line);

@@ -41,9 +41,12 @@ public class GameManager
     
     public async Task ChangeGold(int operation)
     {
+        Console.WriteLine("-----------------------------------------------");
+        Console.WriteLine("Change Gold");
         await _goldSemaphore.WaitAsync();
         try
         {
+            Console.WriteLine($"Changing Gold: {_gold} + {operation}");
             _gold += operation;
         }
         finally

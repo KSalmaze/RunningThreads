@@ -23,6 +23,7 @@ public class Enemy
         _interfaceManager = InterfaceManager.Instance;
         _gameManager = GameManager.Instance;
         _enemySpawner = EnemySpawner.Instance;
+        Gold = gold;
         Health = health;
         Damage = damage;
 
