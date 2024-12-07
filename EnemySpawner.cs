@@ -1,5 +1,6 @@
 namespace RunningThreads;
 
+// Controla a criacao de novos inimigos
 public class EnemySpawner
 {
     // Singleton
@@ -7,19 +8,21 @@ public class EnemySpawner
     public static EnemySpawner Instance => instance;
 
     // Property s
-    private int _delay = 1700;
+    private int _delay = 1700; // Delay entre a criacao de novos inimigos
     
-    public List<Queue<Enemy>> Lanes;
+    public List<Queue<Enemy>> Lanes; // Mantem referencia aos inimigos
 
+    // Lista de templates de inimigos
     private List<(char sprite, int health, int damage, int delay, int gold)> _enemyInfos;
     
-    private GameManager _gameManager = GameManager.Instance;
+    private GameManager _gameManager = GameManager.Instance; // Referencia ao game manager
     
     // Constructor
     public EnemySpawner()
     {
         Lanes = new List<Queue<Enemy>>(){new Queue<Enemy>(), new Queue<Enemy>(), new Queue<Enemy>()};
         
+        // Declarando os templates de inimigos
         _enemyInfos = new List<(char sprite, int health, int damage, int delay, int gold)>();
         _enemyInfos.Add(('A', 2, 1, 1200, 2));
         _enemyInfos.Add(('C', 3,2,2000,5));
