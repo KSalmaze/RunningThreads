@@ -12,6 +12,7 @@ public class Enemy
     
     private InterfaceManager _interfaceManager;
     private GameManager _gameManager;
+    private EnemySpawner _enemySpawner;
     
     public Enemy(char sprite, int lane, int health = 3, int damage = 1,int gold = 2,int delayMilliseconds = 500)
     {
@@ -21,6 +22,7 @@ public class Enemy
         _delayMilliseconds = delayMilliseconds;
         _interfaceManager = InterfaceManager.Instance;
         _gameManager = GameManager.Instance;
+        _enemySpawner = EnemySpawner.Instance;
         Health = health;
         Damage = damage;
 
@@ -29,8 +31,13 @@ public class Enemy
 
     private async Task UpdatePositionOnInterface()
     {
-        Position -= 2;
         await _interfaceManager.AdicionarAtualizacao(_sprite, Position, Lane);
+    }
+
+    private async Task Mover()
+    {
+        Position -= 2;
+        await UpdatePositionOnInterface();
     }
     
     private async Task EnemyController()
@@ -40,7 +47,10 @@ public class Enemy
             // Se a vida for menor que 33% tirar do caps lock
             if (Position > 3) // Implementar um CanMove
             {
-                await UpdatePositionOnInterface();
+                if (CanMove())
+                {
+                    await Mover();
+                }
             }
             else
             {
@@ -50,7 +60,19 @@ public class Enemy
         }
         
         // Retirar o inimigo da interface
+        await _interfaceManager.AdicionarAtualizacao('-', Position, Lane);
         // Dar o gold ao jogador
         await _gameManager.ChangeGold(Gold);
+        _enemySpawner.Lanes[Lane - 1].Dequeue();
+    }
+
+    private bool CanMove()
+    {
+        if (_interfaceManager.Interface[Lane][Position - 2 ] != '-')
+        {
+            return false;
+        }
+        
+        return true;
     }
 }

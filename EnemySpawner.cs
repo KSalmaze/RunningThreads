@@ -7,17 +7,18 @@ public class EnemySpawner
     public static EnemySpawner Instance => instance;
 
     // Property s
-    private int _delay = 1200;
+    private int _delay = 2000;
     
-    public List<Queue<Enemy>> lanes;
+    public List<Queue<Enemy>> Lanes;
 
     private List<(char sprite, int health, int damage, int delay, int gold)> _enemyInfos;
     
     private GameManager _gameManager = GameManager.Instance;
     
+    // Constructor
     public EnemySpawner()
     {
-        lanes = new List<Queue<Enemy>>(){new Queue<Enemy>(), new Queue<Enemy>(), new Queue<Enemy>()};
+        Lanes = new List<Queue<Enemy>>(){new Queue<Enemy>(), new Queue<Enemy>(), new Queue<Enemy>()};
         
         _enemyInfos = new List<(char sprite, int health, int damage, int delay, int gold)>();
         _enemyInfos.Add(('A', 2, 1, 1200, 2));
@@ -25,7 +26,8 @@ public class EnemySpawner
         
         _ = Task.Run(async () => await SpawnEnemys());
     }
-
+    
+    // Tasks
     private async Task SpawnEnemys()
     {
         while (_gameManager.CurrentHealth > 0)
@@ -42,22 +44,21 @@ public class EnemySpawner
             Random random = new Random();
 
             int lane = random.Next(1, 4);
-            Console.WriteLine("---------------------------------------------------------");
-            Console.WriteLine(lane);
-            Console.WriteLine(lanes[lane-1].Count != 0);
-            if (lanes[lane-1].Count != 0 && lanes[lane-1]?.Last()?.Position == 27)
+            //Console.WriteLine("---------------------------------------------------------");
+            //Console.WriteLine(lane);
+            //Console.WriteLine(Lanes[lane-1].Count != 0);
+            if (Lanes[lane-1].Count != 0 && Lanes[lane-1].Last().Position == 27)
             {
                 return Task.CompletedTask;
             }
 
             var x = _enemyInfos[random.Next(0, _enemyInfos.Count)];
 
-            Console.WriteLine(x.sprite);
-
-            Enemy inimigoTeste1 = new Enemy('V', 1, delayMilliseconds: 2000);
+            //Console.WriteLine(x.sprite);
+            
             Enemy enemy = new Enemy(x.sprite, lane, x.health, x.damage, x.gold, x.delay);
 
-            lanes[lane-1].Enqueue(enemy);
+            Lanes[lane-1].Enqueue(enemy);
 
             return Task.CompletedTask;
         }

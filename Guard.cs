@@ -7,7 +7,7 @@ public class Guard
     private char _sprite;
     private int _lane;
     private int _delayMilliseconds;
-    private int _position;
+    private int _position = 1;
     private int _damage;
     private int _level;
     
@@ -16,17 +16,17 @@ public class Guard
 
     private GameManager _gameManager = GameManager.Instance;
     private InterfaceManager _interfaceManager = InterfaceManager.Instance;
+    private EnemySpawner _enemySpawner = EnemySpawner.Instance;
     
-    public Guard(int lane,int position, int delayMilliseconds)
+    public Guard(int lane, int delayMilliseconds)
     {
         _lane = lane;
-        _position = position;
         _delayMilliseconds = delayMilliseconds;
         _level = 0;
         
         _sprite = _upgradedSprites[_level];
         _damage = _upgradedDamage[_level];
-
+        
         _ = Task.Run(async () => await GuardBehavior());
     }
 
@@ -42,11 +42,38 @@ public class Guard
     
     private async Task GuardBehavior()
     {
+        // Coloca o guarda na interface
+        await _interfaceManager.AdicionarAtualizacao(_sprite, _position, _lane);
+        
         while (_gameManager.CurrentHealth > 0)
         {
-            // Dar dano ao inimigo da lane
-            // Alterar a sprite para entender que atirou
+            try
+            {
+                while (!(_enemySpawner.Lanes[_lane - 1].Count > 0)) {}
+
+                // Dar dano ao inimigo da lane
+                _enemySpawner.Lanes[_lane - 1].First().Health -= _damage;
+                
+                // Alterar a sprite para uma indicacao visual que atirou
+                _ = Task.Run(async () => await AlterarSprite());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
             await Task.Delay(_delayMilliseconds);
         }
+    }
+
+    private async Task AlterarSprite()
+    {
+        char temp = _sprite;
+        _sprite = 'O';
+        await _interfaceManager.AdicionarAtualizacao(_sprite, _position, _lane);
+        await Task.Delay(350);
+        _sprite = temp;
+        await _interfaceManager.AdicionarAtualizacao(_sprite, _position, _lane);
     }
 }
