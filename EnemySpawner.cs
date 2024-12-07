@@ -35,24 +35,36 @@ public class EnemySpawner
         }
     }
     
-    private Task? SpawnEnemy()
+    private Task SpawnEnemy()
     {
-        Random random = new Random();
-
-        int lane = random.Next(0, 4);
-        Console.WriteLine(lanes[lane].Count != 0);
-        if (lanes[lane].Count != 0 && lanes[lane]?.Last()?.Position == 27)
+        try
         {
-            //Enemy inimigoTeste2 = new Enemy('V',1, delayMilliseconds:2000);
-            return null;
-        }
-        
-        var x = _enemyInfos[random.Next(0,_enemyInfos.Count)];
-        
-        Enemy enemy = new Enemy(x.sprite, lane, x.health, x.damage, x.gold, x.delay);
-        
-        lanes[lane].Enqueue(enemy);
+            Random random = new Random();
 
-        return null;
+            int lane = random.Next(1, 4);
+            Console.WriteLine("---------------------------------------------------------");
+            Console.WriteLine(lane);
+            Console.WriteLine(lanes[lane-1].Count != 0);
+            if (lanes[lane-1].Count != 0 && lanes[lane-1]?.Last()?.Position == 27)
+            {
+                return Task.CompletedTask;
+            }
+
+            var x = _enemyInfos[random.Next(0, _enemyInfos.Count)];
+
+            Console.WriteLine(x.sprite);
+
+            Enemy inimigoTeste1 = new Enemy('V', 1, delayMilliseconds: 2000);
+            Enemy enemy = new Enemy(x.sprite, lane, x.health, x.damage, x.gold, x.delay);
+
+            lanes[lane-1].Enqueue(enemy);
+
+            return Task.CompletedTask;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
