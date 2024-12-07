@@ -1,12 +1,10 @@
-﻿using System;
-using System.Numerics;
-using RunningThreads;
+﻿namespace RunningThreads;
 
 public class Program
 {
-    static async Task Main(string[] args)
+    static async Task Main()
     {
-        
+        //Menu();
         // Menu - 1 Jogar - 2 Jogar Modo debug - 3 Como Jogar - Esc Quit
 
         InterfaceManager interfaceManager = InterfaceManager.Instance;
@@ -17,12 +15,13 @@ public class Program
         Guard guarda2 = new Guard(2,1000);
         Guard guarda3 = new Guard(3,1000);
         
-        // Inicia a thread de maneira pararela
-        //Task.Run(async () => await interfaceManager.UpdateInterface()); 
+        // Comeca a ler as entradas do usuario
+        InputManager inputManager = new InputManager([guarda1, guarda2, guarda3]);
+        await inputManager.Start();
+    }
+
+    public static void Menu()
+    {
         
-        while (Console.ReadKey().Key != ConsoleKey.Q)
-        {
-            
-        }
     }
 }

@@ -41,12 +41,9 @@ public class GameManager
     
     public async Task ChangeGold(int operation)
     {
-        Console.WriteLine("-----------------------------------------------");
-        Console.WriteLine("Change Gold");
         await _goldSemaphore.WaitAsync();
         try
         {
-            Console.WriteLine($"Changing Gold: {_gold} + {operation}");
             _gold += operation;
         }
         finally
@@ -66,6 +63,12 @@ public class GameManager
         }
         
         EndGame();
+    }
+
+    public async Task IncreaseMaxHealth()
+    {
+        MaxHealth += 10;
+        await Health(+10);
     }
     
     private void EndGame()

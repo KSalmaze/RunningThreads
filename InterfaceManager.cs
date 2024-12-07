@@ -87,7 +87,7 @@ public class InterfaceManager
         await _interfaceSemaphore.WaitAsync();
         try
         {
-            //Console.Clear();
+            Console.Clear();
             foreach (var line in Interface)
             {
                 Console.WriteLine(line);

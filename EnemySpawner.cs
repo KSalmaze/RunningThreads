@@ -7,7 +7,7 @@ public class EnemySpawner
     public static EnemySpawner Instance => instance;
 
     // Property s
-    private int _delay = 2000;
+    private int _delay = 1700;
     
     public List<Queue<Enemy>> Lanes;
 
@@ -22,7 +22,9 @@ public class EnemySpawner
         
         _enemyInfos = new List<(char sprite, int health, int damage, int delay, int gold)>();
         _enemyInfos.Add(('A', 2, 1, 1200, 2));
-        _enemyInfos.Add(('C', 3,2,2200,5));
+        _enemyInfos.Add(('C', 3,2,2000,5));
+        _enemyInfos.Add(('D', 6,3,2600,8));
+        _enemyInfos.Add(('O', 15,3,2800,8));
         
         _ = Task.Run(async () => await SpawnEnemys());
     }
@@ -44,17 +46,13 @@ public class EnemySpawner
             Random random = new Random();
 
             int lane = random.Next(1, 4);
-            //Console.WriteLine("---------------------------------------------------------");
-            //Console.WriteLine(lane);
-            //Console.WriteLine(Lanes[lane-1].Count != 0);
             if (Lanes[lane-1].Count != 0 && Lanes[lane-1].Last().Position == 27)
             {
                 return Task.CompletedTask;
             }
 
             var x = _enemyInfos[random.Next(0, _enemyInfos.Count)];
-
-            //Console.WriteLine(x.sprite);
+            
             
             Enemy enemy = new Enemy(x.sprite, lane, x.health, x.damage, x.gold, x.delay);
 

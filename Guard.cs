@@ -30,13 +30,14 @@ public class Guard
         _ = Task.Run(async () => await GuardBehavior());
     }
 
-    public void Upgrade()
+    public async Task Upgrade()
     {
         if (_level + 1 < _upgradedDamage.Length)
         {
             _level++;
             _sprite = _upgradedSprites[_level];
             _damage = _upgradedDamage[_level];
+            await _interfaceManager.AdicionarAtualizacao(_sprite, _position, _lane);
         }
     }
     
@@ -69,11 +70,8 @@ public class Guard
 
     private async Task AlterarSprite()
     {
-        char temp = _sprite;
-        _sprite = 'O';
-        await _interfaceManager.AdicionarAtualizacao(_sprite, _position, _lane);
+        await _interfaceManager.AdicionarAtualizacao('O', _position, _lane);
         await Task.Delay(350);
-        _sprite = temp;
         await _interfaceManager.AdicionarAtualizacao(_sprite, _position, _lane);
     }
 }
