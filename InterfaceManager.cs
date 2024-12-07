@@ -82,11 +82,16 @@ public class InterfaceManager
         }
     }
 
-    public async Task UpdateInterface()
+    public async Task UpdateInterface(CancellationToken ct = default)
     {
         await _interfaceSemaphore.WaitAsync();
         try
         {
+            if (ct.IsCancellationRequested)
+            {
+                return;
+            }
+            
             Console.Clear();
             foreach (var line in Interface)
             {

@@ -44,6 +44,8 @@ public class InputManager
                         }
                     }
                     break;
+                default:
+                    break;
             }
         }
     }

@@ -20,12 +20,13 @@ public class GameManager
     public int MaxHealth; // Vida maxima atual
     private int _currentHealth; // Adicionar get e set com verificacao
     private readonly SemaphoreSlim _healthSemaphore = new SemaphoreSlim(1, 1);
-    public int CurrentHealth => _currentHealth;
+    public int CurrentHealth => _currentHealth; // Geter de health
     private int _gold; // Dinheiro para o jogador gastar
     private readonly SemaphoreSlim _goldSemaphore = new SemaphoreSlim(1, 1);
-    public int Gold => _gold;
-    
+    public int Gold => _gold; // Geter de gold
+   
     // Methods
+    // Funcao para alterar a vida
     public async Task Health(int operation)
     {
         await _healthSemaphore.WaitAsync();
@@ -39,6 +40,7 @@ public class GameManager
         }
     }
     
+    // Funcao para alterar a quantidade de ouro
     public async Task ChangeGold(int operation)
     {
         await _goldSemaphore.WaitAsync();
@@ -52,6 +54,7 @@ public class GameManager
         }
     }
     
+    // Regenera a vida com o tempo
     private async Task RegenHealth(){
         while (_currentHealth > 0)
         {
@@ -62,17 +65,24 @@ public class GameManager
             }
         }
         
-        EndGame();
+        await EndGame();
     }
 
+    // Funcao para aumentar a vida maxima 
     public async Task IncreaseMaxHealth()
     {
         MaxHealth += 10;
         await Health(+10);
     }
     
-    private void EndGame()
+    private async Task EndGame()
     {
-        throw new NotImplementedException();
+        CancellationTokenSource cts = new CancellationTokenSource();
+        await InterfaceManager.Instance.UpdateInterface(cts.Token);
+        await cts.CancelAsync();
+        Console.Clear();
+        Console.WriteLine("Que pena, seu castelo foi tomado pelos inimigos : (");
+        Task.Delay(3000).Wait();
+        Environment.Exit(1);
     }
 }
