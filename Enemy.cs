@@ -5,7 +5,7 @@ public class Enemy
     private char _sprite;
     public int Lane;
     private int _delayMilliseconds;
-    private int _position;
+    public int Position;
     public int Health;
     public int Damage;
     public int Gold;
@@ -17,7 +17,7 @@ public class Enemy
     {
         _sprite = sprite;
         Lane = lane;
-        _position = 27; // Vai para a ultima posicao da lane
+        Position = 27; // Vai para a ultima posicao da lane
         _delayMilliseconds = delayMilliseconds;
         _interfaceManager = InterfaceManager.Instance;
         _gameManager = GameManager.Instance;
@@ -29,8 +29,8 @@ public class Enemy
 
     private async Task UpdatePositionOnInterface()
     {
-        _position -= 2;
-        await _interfaceManager.AdicionarAtualizacao(_sprite, _position, Lane);
+        Position -= 2;
+        await _interfaceManager.AdicionarAtualizacao(_sprite, Position, Lane);
     }
     
     private async Task EnemyController()
@@ -38,7 +38,7 @@ public class Enemy
         while (Health > 0)
         {
             // Se a vida for menor que 33% tirar do caps lock
-            if (_position > 3) // Implementar um CanMove
+            if (Position > 3) // Implementar um CanMove
             {
                 await UpdatePositionOnInterface();
             }
