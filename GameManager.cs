@@ -77,12 +77,18 @@ public class GameManager
     
     private async Task EndGame()
     {
-        CancellationTokenSource cts = new CancellationTokenSource();
-        await InterfaceManager.Instance.UpdateInterface(cts.Token);
-        await cts.CancelAsync();
-        Console.Clear();
-        Console.WriteLine("Que pena, seu castelo foi tomado pelos inimigos : (");
-        Task.Delay(3000).Wait();
-        Environment.Exit(1);
+        try
+        {
+            InterfaceManager.Instance.StopInterface();
+            Console.Clear();
+            Console.WriteLine("Que pena, seu castelo foi tomado pelos inimigos :(");
+            Task.Delay(3000).Wait();
+            Environment.Exit(1);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

@@ -18,6 +18,7 @@ public class InterfaceManager
 
     // Propriedades
     public int FrameRate; // Apenas uma atualização por frame
+    private readonly CancellationTokenSource _cts = new CancellationTokenSource();
     
     private readonly SemaphoreSlim _interfaceSemaphore = new SemaphoreSlim(1, 1);
 
@@ -72,13 +73,18 @@ public class InterfaceManager
         Interface[lane] = new string(temp);
     }
 
+    public void StopInterface()
+    {
+        _cts.Cancel();
+    }
+    
     public async Task AtualizarTela()
     {
-        while (true)
+        while (!_cts.Token.IsCancellationRequested)
         {
-            await Task.Delay(1000 / FrameRate);
+            await Task.Delay(1000 / FrameRate, _cts.Token);
             Console.WriteLine("Atualizando a tela");
-            await UpdateInterface();
+            await UpdateInterface(_cts.Token);
         }
     }
 
